@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+</head>
+<body>
+    <form>
+       <fieldset>
+        <legend>Contect Details</legend>
+
+        <label for="username">Name:</label>
+        <input type="text" name="username" placeholder="Enter your name">
+
+        <br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" placeholder="Enter your emmail">
+
+        <br><br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" placeholder="Enter your password">
+
+        <br><br>
+
+        <label for="feedback">write your feedback: <br></label>
+        <textarea name="feedback"></textarea>
+
+        <br><br>
+
+        <label for="gender">Select your gender: <br></label>
+        <input type="radio" name="gender" value="Male">Male
+        <input type="radio" name="gender" value="Female">Female
+        <input type="radio" name="gender" value="Other">Other
+
+        <br><br>
+
+        <label for="fav-fruits">My fav fruits: <br> </label>
+        <input type="checkbox" name="fav-fruits" value="Mango">Mango
+        <input type="checkbox" name="fav-fruits" value="banana">Banana
+        <input type="checkbox" name="fav-fruits" value="Guava">Guava
+        <input type="checkbox" name="fav-fruits" value="Apple">apple
+
+        <br><br>
+
+        <label for="cv">Upload your CV: <br></label>
+        <input type="file" name="cv" accept=".pdf, .jpeg">
+
+        <br><br>
+
+        <label for="">Select your country: <br></label>
+        <select name="country">
+            <option value="">Select</option>
+            <option value="Pakistan">Pakistan</option>
+            <option value="India">India</option>
+            <option value="Iran">Iran</option>
+            <option value="China">China</option>
+        </select>
+
+        <br><br>
+
+        <label for="">Enter URL:</label>
+        <input type="url">
+
+        <br><br>
+
+        <label for="dob">Select your date of birth: <br></label>
+        <input type="date" name="dob">
+
+        <br><br>
+
+        <input type="submit">
+       </fieldset>
+    </form>
+</body>
+</html>

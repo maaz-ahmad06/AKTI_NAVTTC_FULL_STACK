@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://kit.fontawesome.com/6c105f365c.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <form>
+        <h1>Student Registration Form</h1>
+        <hr>
+        <label for="name">Full Name</label>
+        <div>
+            <i class="fa-solid fa-user"></i> <input type="text" name="name" placeholder="Enter your full name">
+        </div> <br>
+        <label for="email">Email Address</label>
+        <div>
+            <i class="fa-solid fa-envelope"></i></i> <input type="email" name="email" placeholder="Enter your email">
+        </div> <br>
+        <label for="PN">Phone Number</label>
+        <div>
+            <i class="fa-solid fa-phone"></i> <input type="tel" name="PN" placeholder="Enter your phone number">
+        </div><br>
+        <div class="div">
+            <div class="left">
+                <label for="course">Course Intrasted in <br> </label>
+                <select name="course">
+                    <option value="">Select a course</option>
+                </select>
+            </div>
+            <div class="right">
+                <label for="gender">Gender <br></label>
+                <input type="radio" name="gender"> Male
+                <input type="radio" name="gender"> Female
+                <input type="radio" name="gender"> Other
+            </div>
+        </div>
+        <br>
+        <label for="message">Message <br></label>
+        <textarea name="message" placeholder="Write your message here..."></textarea>
+        <br>
+        <input type="checkbox" name="tc">
+        <label for="tc">I agree to the terms and conditions</label>
+        <br>
+        <input type="submit" value="Submit Form">
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,86 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+body{
+    background-color: #BEBEBE;
+}
+.first{
+    width: 96%;
+    height: 75px;
+    background-color: #E0E0E0;
+    color: #64645A;
+    margin-top: 50px;
+    margin-left: 30px;
+    padding: 20px;
+    opacity: 0.9;
+}
+.second{
+    width: 96.7%;
+    margin-top: 20px;
+    margin-left: 25px;
+    padding: 5px;
+    color: white;
+}
+#para1{
+    background-color: #0088DD;
+    padding: 5px;
+}
+#para2{
+    background-color: #0095E2;
+    padding: 5px;
+}
+#para3{
+    background-color: #00A0E6;
+    padding: 5px;
+}
+#para4{
+    background-color: #30AAE9;
+    padding: 5px;
+}
+#para5{
+    background-color: #54B6ED;
+    padding: 5px;
+}
+#para6{
+    background-color: #72C1F0;
+    padding: 5px;
+}
+#para7{
+    background-color: #8CCAF2;
+    padding: 5px;
+}
+#para8{
+    background-color: #00BB88;
+    padding: 5px;
+}
+#para9{
+    background-color: #F5B0CC;
+    padding: 5px;
+}
+#para10{
+    background-color: #F69FC0;
+    padding: 5px;
+}
+#para11{
+    background-color: #F58CB2;
+    padding: 5px;
+}
+#para12{
+    background-color: #F47BA6;
+    padding: 5px;
+}
+#para13{
+    background-color: #F36A98;
+    padding: 5px;
+}
+#para14{
+    background-color: #F45A8B;
+    padding: 5px;
+}
+#para15{
+    background-color: #EE3E80;
+    padding: 5px;
+}

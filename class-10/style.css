@@ -1,0 +1,33 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.position .box{
+    border: 1px solid black;
+    width: 400px;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.position .box1{
+    background-color: blue;
+    position: relative;
+    top: 50px;
+    left: 30px;
+}
+.position .box2{
+    background-color: green;
+    position: absolute;
+    top: 10px;
+    right: 40px;
+}
+.position .box3{
+    background-color: red;
+    position: fixed;
+    top: 30px;
+}
+.position .box4{
+    background-color: pink;
+}

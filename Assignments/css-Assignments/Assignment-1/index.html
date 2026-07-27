@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Selectors</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- simple tags -->
+    <h1>Heading</h1>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+    <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+    <button>Click</button>
+    
+    <!-- using class attribute -->
+    <div class="same">Same class</div>
+    <div class="same">Same class</div>
+    <div class="different">Different class</div>
+
+    <!-- using id attribute -->
+     <h1 id="head">This Heading is targeted through ID Selector</h1>
+     <p id="para">This Paragraph us targated through ID Selector</p>
+     
+     <!-- here we use descendant child relation -->
+     <div>
+         <h1>Descendant Child Relation</h1>
+         <p>This Paragraph is targeted through descendant selector</p>
+         <section>
+             <p>This Paragraph is targeted through descendant selector</p>
+            </section>
+        </div>
+        
+        <!-- here we use direct child relation -->
+        <div>
+            <p>This Paragraph is targated through direct child selector</p>
+            <div>
+                <p>Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+            </div>
+        </div>
+        
+        <!-- here we use adjacent sibling relation -->
+        <h1>Adjacent Sibling Relation</h1>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+        
+        
+        <!-- here we use general sibling relation -->
+        <h1>General Relation</h1>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing.</p>
+        <div>Lorem ipsum dolor, sit amet consectetur adipisicing.</div>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+
+</body>
+
+</html>

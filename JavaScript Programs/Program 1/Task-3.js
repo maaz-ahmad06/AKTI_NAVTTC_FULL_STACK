@@ -1,0 +1,12 @@
+let num1 = 8;
+let num2 = 4;
+let sum = num1 + num2;
+let diff = num1 - num2;
+let prod = num1 * num2;
+let div = num1 / num2;
+let mod = num1 % num2;
+alert(`the Sum of ${num1} and ${num2} is ${sum}`);
+alert(`the Difference of ${num1} and ${num2} is ${diff}`);
+alert(`the Product of ${num1} and ${num2} is ${prod}`);
+alert(`the Division of ${num1} and ${num2} is ${div}`);
+alert(`the Modulus of ${num1} and ${num2} is ${mod}`);

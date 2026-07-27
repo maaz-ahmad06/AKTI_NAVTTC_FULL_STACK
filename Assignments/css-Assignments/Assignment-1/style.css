@@ -1,0 +1,65 @@
+/* Universal Selector */
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: sans-serif;
+}
+
+/* Element Selector */
+h1{
+    color: red;
+}
+p{
+    color: blue;
+}
+button{
+    background: #000;
+    color: rgb(255, 255, 255);
+}
+
+/* Class Selector */
+.same{
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+    background: purple;
+}
+.different{
+    width: 200px;
+    height: 200px;
+    border: 1px solid black;
+    background: pink;
+}
+
+/* Id Selector */
+#head{
+    color: green;
+    font-size: 18px;
+    align-items: center;
+}
+#para{
+    color: aqua;
+    font-size: 18px;
+    align-items: center;
+}
+
+/* Descendant Selector */
+div p{
+    color: #6b135f;
+}
+
+/* Child Selector */
+div>p{
+    color: #000000;
+}
+
+/* Adjacent Selector */
+h1+p{
+    color: chartreuse;
+}
+
+/* General Selector */
+h1~p{
+    color: blue;
+}

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Information</title>
+</head>
+
+<body>
+
+    <h1 align="center">Student Registration Form</h1>
+
+    <form>
+
+        <fieldset>
+            <legend> Personal Information</legend>
+
+            <label for="fullname">Full Name:</label>
+            <input type="text" name="fullname" placeholder="Enter your full name" required>
+
+            <br><br>
+
+            <label for="fathername">Father's Name:</span></label>
+            <input type="text" name="fathername" placeholder="Enter your father's name" required>
+
+            <br><br>
+
+            <label for="email">Email Address:</span></label>
+            <input type="email" name="email" placeholder="example@email.com" required>
+
+            <br><br>
+
+            <label for="phone">Phone Number:</span></label>
+            <input type="tel" name="phone" placeholder="03XX-XXXXXXX" required>
+
+            <br><br>
+
+            <label for="dob">Date of Birth:</span></label>
+            <input type="date" name="dob" required>
+
+            <br><br>
+
+            <label for="age">Age:</label>
+            <input type="number" name="age" placeholder="Enter your age" required>
+        </fieldset>
+
+        <fieldset>
+            <legend>Gender</legend>
+            <div>
+                <label><input type="radio" name="gender" value="Male" required> Male</label>
+                <label><input type="radio" name="gender" value="Female"> Female</label>
+                <label><input type="radio" name="gender" value="Other"> Other</label>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>City Selection</legend>
+            <label for="city">Select your city: <br></label>
+            <select id="city" name="city" required>
+                <option value="" disabled selected>-- Choose a city --</option>
+                <option value="Peshawar">Peshawar</option>
+                <option value="Islamabad">Islamabad</option>
+                <option value="Lahore">Lahore</option>
+                <option value="Karachi">Karachi</option>
+                <option value="Quetta">Quetta</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Skills</legend>
+            <label for="skills">Select your skills: <br></label>
+            <select name="skills">
+                <option value="HTML">HTML</option>
+                <option value="CSS">CSS</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="C++">C++</option>
+                <option value="Python">Python</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Upload Section</legend>
+            <label for="cv">Upload Profile Picture: <br></label>
+            <input type="file" id="profile-pic" name="cv" accept=".pdf, .jpeg">
+        </fieldset>
+
+        <fieldset>
+            <legend>Address</legend>
+            <label for="address">Complete Address: <br></span></label>
+            <textarea name="address" placeholder="House #, Street, Area, City, Province"
+                required></textarea>
+        </fieldset>
+
+        <fieldset>
+            <legend>Password Section</legend>
+            <label for="password">Create Password: <br></label>
+            <input type="password" name="password" placeholder="Enter a strong password"required>
+            <br>
+            <label for="confirm-password">Confirm Password: <br></label>
+            <input type="password" name="confirm_password" placeholder="Re-enter your password" required>
+        </fieldset>
+
+        <fieldset>
+            <legend>Course Selection</legend>
+            <label for="course">Select a course: <br></label>
+            <select name="course" required>
+                <option value="">-- Choose a course --</option>
+                <option value="Web Development">Web Development</option>
+                <option value="Graphic Design">Graphic Design</option>
+                <option value="Artificial Intelligence">Artificial Intelligence</option>
+                <option value="Digital Marketing">Digital Marketing</option>
+                <option value="Mobile App Development">Mobile App Development</option>
+            </select>
+        </fieldset>
+
+        <fieldset>
+            <legend>Terms and Conditions</legend>
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">I agree to the Terms and Conditions</label>
+        </fieldset>
+        <br>
+
+            <input type="submit" value="Submit">
+            <input type="reset" value="Reset">
+
+    </form>
+
+</body>
+
+</html>
