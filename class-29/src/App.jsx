@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import './App.css';
-import { StudentRegistrationForm } from './components/StudentRegistrationForm';
+import { StudentRegistrationForm, DEFAULT_FORM_VALUES } from './components/StudentRegistrationForm';
 import { StudentIDCard } from './components/StudentIDCard';
 import { RegisteredStudentsList } from './components/RegisteredStudentsList';
 import { SuccessModal } from './components/SuccessModal';
@@ -46,14 +46,7 @@ const INITIAL_STUDENTS = [
 
 function App() {
   const [students, setStudents] = useState(INITIAL_STUDENTS);
-  const [liveData, setLiveData] = useState({
-    fullName: 'Muhammad Ali Khan',
-    cnic: '42101-9876543-1',
-    course: 'Full Stack Web Development (MERN Stack)',
-    shift: 'morning',
-    city: 'Karachi',
-    phone: '0300-9876543'
-  });
+  const [liveData, setLiveData] = useState(DEFAULT_FORM_VALUES);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [lastSubmitted, setLastSubmitted] = useState(null);
 
@@ -79,6 +72,13 @@ function App() {
     if (student.photoPreview) {
       setPhotoPreview(student.photoPreview);
     }
+  };
+
+  // Reset form and live preview for another registration
+  const handleResetForNewStudent = () => {
+    setLastSubmitted(null);
+    setPhotoPreview(null);
+    setLiveData(DEFAULT_FORM_VALUES);
   };
 
   return (
@@ -143,6 +143,7 @@ function App() {
         <SuccessModal
           student={lastSubmitted}
           onClose={() => setLastSubmitted(null)}
+          onResetForm={handleResetForNewStudent}
         />
       )}
 

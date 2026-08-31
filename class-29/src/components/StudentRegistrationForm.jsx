@@ -2,6 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { COURSES, QUALIFICATIONS, CITIES, SKILLS_LIST, SHIFTS } from '../data/courses';
 
+export const DEFAULT_FORM_VALUES = {
+  fullName: '',
+  fatherName: '',
+  cnic: '',
+  email: '',
+  phone: '',
+  dob: '',
+  gender: 'Male',
+  course: COURSES[0].name,
+  qualification: QUALIFICATIONS[0],
+  shift: 'morning',
+  city: 'Karachi',
+  address: '',
+  skills: [],
+  terms: false
+};
+
 export function StudentRegistrationForm({ onSubmitSuccess, onWatchChange, photoPreview, setPhotoPreview }) {
   const {
     register,
@@ -12,22 +29,7 @@ export function StudentRegistrationForm({ onSubmitSuccess, onWatchChange, photoP
     formState: { errors, isSubmitting, isDirty, isValid }
   } = useForm({
     mode: 'onChange',
-    defaultValues: {
-      fullName: '',
-      fatherName: '',
-      cnic: '',
-      email: '',
-      phone: '',
-      dob: '',
-      gender: 'Male',
-      course: COURSES[0].name,
-      qualification: QUALIFICATIONS[1],
-      shift: 'morning',
-      city: 'Karachi',
-      address: '',
-      skills: ['HTML5 / CSS3', 'JavaScript (ES6+)'],
-      terms: false
-    }
+    defaultValues: DEFAULT_FORM_VALUES
   });
 
   // Watch all fields for live sync with ID card
@@ -94,6 +96,10 @@ export function StudentRegistrationForm({ onSubmitSuccess, onWatchChange, photoP
     };
 
     onSubmitSuccess(newStudentRecord);
+
+    // Automatically reset the form for the next student
+    reset(DEFAULT_FORM_VALUES);
+    setPhotoPreview(null);
   };
 
   return (
