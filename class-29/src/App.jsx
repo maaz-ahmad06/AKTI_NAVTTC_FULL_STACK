@@ -49,6 +49,7 @@ function App() {
   const [liveData, setLiveData] = useState(DEFAULT_FORM_VALUES);
   const [photoPreview, setPhotoPreview] = useState(null);
   const [lastSubmitted, setLastSubmitted] = useState(null);
+  const [editingStudent, setEditingStudent] = useState(null);
 
   // Sync watch changes with live preview
   const handleWatchChange = useCallback((values) => {
@@ -59,6 +60,7 @@ function App() {
   const handleFormSubmitSuccess = (newStudent) => {
     setStudents((prev) => [newStudent, ...prev]);
     setLastSubmitted(newStudent);
+    setEditingStudent(null);
   };
 
   // Delete student record
@@ -74,9 +76,22 @@ function App() {
     }
   };
 
+  // Edit / Fix student data if user closes modal with cross or clicks Edit
+  const handleEditStudent = (studentToEdit) => {
+    // Remove the mistaken entry from students list
+    setStudents((prev) => prev.filter((s) => s.id !== studentToEdit.id));
+    setEditingStudent(studentToEdit);
+    setLiveData(studentToEdit);
+    if (studentToEdit.photoPreview) {
+      setPhotoPreview(studentToEdit.photoPreview);
+    }
+    setLastSubmitted(null);
+  };
+
   // Reset form and live preview for another registration
   const handleResetForNewStudent = () => {
     setLastSubmitted(null);
+    setEditingStudent(null);
     setPhotoPreview(null);
     setLiveData(DEFAULT_FORM_VALUES);
   };
@@ -118,6 +133,8 @@ function App() {
             onWatchChange={handleWatchChange}
             photoPreview={photoPreview}
             setPhotoPreview={setPhotoPreview}
+            editStudentData={editingStudent}
+            onClearEdit={() => setEditingStudent(null)}
           />
         </section>
 
@@ -144,6 +161,7 @@ function App() {
           student={lastSubmitted}
           onClose={() => setLastSubmitted(null)}
           onResetForm={handleResetForNewStudent}
+          onEdit={handleEditStudent}
         />
       )}
 

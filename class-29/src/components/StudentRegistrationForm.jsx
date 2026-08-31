@@ -19,7 +19,14 @@ export const DEFAULT_FORM_VALUES = {
   terms: false
 };
 
-export function StudentRegistrationForm({ onSubmitSuccess, onWatchChange, photoPreview, setPhotoPreview }) {
+export function StudentRegistrationForm({ 
+  onSubmitSuccess, 
+  onWatchChange, 
+  photoPreview, 
+  setPhotoPreview,
+  editStudentData,
+  onClearEdit
+}) {
   const {
     register,
     handleSubmit,
@@ -31,6 +38,16 @@ export function StudentRegistrationForm({ onSubmitSuccess, onWatchChange, photoP
     mode: 'onChange',
     defaultValues: DEFAULT_FORM_VALUES
   });
+
+  // Populate form if user wants to edit / correct data
+  useEffect(() => {
+    if (editStudentData) {
+      reset(editStudentData);
+      if (editStudentData.photoPreview) {
+        setPhotoPreview(editStudentData.photoPreview);
+      }
+    }
+  }, [editStudentData, reset, setPhotoPreview]);
 
   // Watch all fields for live sync with ID card
   const watchedValues = watch();
