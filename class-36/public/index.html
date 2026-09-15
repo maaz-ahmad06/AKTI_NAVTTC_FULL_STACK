@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Auth & Bcrypt Hashing - MongoDB Live Demo</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="badge-header">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>Class 36 • Full Stack Security Demo</span>
+            </div>
+            <h1>Bcrypt Hashing & MongoDB Live Store</h1>
+            <p>Enter user data below. Sensitive data is automatically hashed with <strong>bcrypt (10 salt rounds)</strong> on the backend before saving to MongoDB Atlas, and rendered instantly on this same page.</p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="main-grid">
+            <!-- Left Column: Input Form -->
+            <section class="card form-card">
+                <div class="card-header">
+                    <div class="icon-circle icon-shield">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div>
+                        <h2>Submit User Data</h2>
+                        <p class="subtitle">Data is encrypted on the server</p>
+                    </div>
+                </div>
+
+                <form id="userForm" autocomplete="off">
+                    <div class="form-group">
+                        <label for="userName">
+                            <i class="fa-regular fa-user"></i> Full Name
+                        </label>
+                        <input 
+                            type="text" 
+                            id="userName" 
+                            name="name" 
+                            placeholder="e.g. Maaz Ahmad" 
+                            required 
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userEmail">
+                            <i class="fa-regular fa-envelope"></i> Email Address
+                        </label>
+                        <input 
+                            type="email" 
+                            id="userEmail" 
+                            name="email" 
+                            placeholder="e.g. maaz@example.com" 
+                            required 
+                            autocomplete="off"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="userPassword">
+                            <i class="fa-solid fa-key"></i> Sensitive Password / Secret
+                        </label>
+                        <div class="password-wrapper">
+                            <input 
+                                type="password" 
+                                id="userPassword" 
+                                name="password" 
+                                placeholder="Enter secret password..." 
+                                required 
+                                autocomplete="new-password"
+                            >
+                            <button type="button" id="togglePasswordBtn" class="toggle-pwd-btn" title="Toggle Visibility">
+                                <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                        <span class="input-hint">
+                            <i class="fa-solid fa-circle-info"></i> Will be transformed into a 60-character <code>$2a$...</code> hash on backend.
+                        </span>
+                    </div>
+
+                    <div class="security-infobox">
+                        <div class="info-title">
+                            <i class="fa-solid fa-microchip"></i> Backend Flow:
+                        </div>
+                        <div class="flow-steps">
+                            <span class="step-badge">1. Plain Input</span>
+                            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+                            <span class="step-badge highlight">2. Bcrypt Hash (Salt: 10)</span>
+                            <i class="fa-solid fa-arrow-right flow-arrow"></i>
+                            <span class="step-badge">3. MongoDB Save</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary">
+                        <span class="btn-text">
+                            <i class="fa-solid fa-paper-plane"></i> Save & Hash in MongoDB
+                        </span>
+                        <span class="spinner hidden" id="btnSpinner"></span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right Column: Live Data Display -->
+            <section class="card display-card">
+                <div class="card-header space-between">
+                    <div class="flex-align">
+                        <div class="icon-circle icon-database">
+                            <i class="fa-solid fa-database"></i>
+                        </div>
+                        <div>
+                            <h2>MongoDB Records</h2>
+                            <p class="subtitle">Live database entries rendered directly</p>
+                        </div>
+                    </div>
+                    <div class="header-actions">
+                        <span class="record-counter" id="recordCounter">0 Records</span>
+                        <button id="refreshBtn" class="btn-icon" title="Refresh Records">
+                            <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Records List Container -->
+                <div class="records-container" id="recordsContainer">
+                    <!-- Loading Skeleton -->
+                    <div class="loading-state" id="loadingState">
+                        <div class="spinner-large"></div>
+                        <p>Fetching records from MongoDB Atlas...</p>
+                    </div>
+
+                    <!-- Dynamic list items will be injected here -->
+                    <div class="records-list" id="recordsList"></div>
+
+                    <!-- Empty State -->
+                    <div class="empty-state hidden" id="emptyState">
+                        <div class="empty-icon">
+                            <i class="fa-solid fa-folder-open"></i>
+                        </div>
+                        <h3>No Records Found</h3>
+                        <p>Fill out the form on the left to add your first user record to MongoDB.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
