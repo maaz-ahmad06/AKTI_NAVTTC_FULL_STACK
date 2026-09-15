@@ -24,10 +24,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 // API Routes
 
-// 1. Get all users
+// 1. Get all registered members (Password excluded completely)
 app.get('/api/users', async (req, res) => {
     try {
-        const users = await User.find().sort({ createdAt: -1 });
+        const users = await User.find().select('-password').sort({ createdAt: -1 });
         res.status(200).json({
             success: true,
             count: users.length,
@@ -43,84 +43,120 @@ app.get('/api/users', async (req, res) => {
     }
 });
 
-// 2. Create a new user with hashed password
+// 2. Register user with full details & securely hash sensitive password
 app.post('/api/users', async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const {
+            fullName,
+            email,
+            phone,
+            role,
+            organization,
+            city,
+            country,
+            experience,
+            skills,
+            bio,
+            password
+        } = req.body;
 
-        if (!name || !email || !password) {
+        // Basic validations
+        if (!fullName || !email || !phone || !role || !organization || !city || !password) {
             return res.status(400).json({
                 success: false,
-                message: 'All fields (name, email, password) are required'
+                message: 'Please fill in all required fields (Name, Email, Phone, Role, Organization, City, Password)'
             });
         }
 
-        // Check if user with same email already exists
+        // Check if email is already registered
         const existingUser = await User.findOne({ email: email.toLowerCase().trim() });
         if (existingUser) {
             return res.status(400).json({
                 success: false,
-                message: 'A record with this email already exists'
+                message: 'A member with this email address already exists'
             });
         }
 
-        // Hash the sensitive password using bcrypt
+        // Securely hash sensitive password using bcrypt
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Create and save the new user record in MongoDB
+        // Parse skills into an array if passed as string
+        let skillsArray = [];
+        if (Array.isArray(skills)) {
+            skillsArray = skills;
+        } else if (typeof skills === 'string') {
+            skillsArray = skills
+                .split(',')
+                .map(s => s.trim())
+                .filter(s => s.length > 0);
+        }
+
+        // Create new user in MongoDB
         const newUser = new User({
-            name: name.trim(),
+            fullName: fullName.trim(),
             email: email.toLowerCase().trim(),
+            phone: phone.trim(),
+            role: role.trim(),
+            organization: organization.trim(),
+            city: city.trim(),
+            country: country ? country.trim() : 'Pakistan',
+            experience: experience || 'Junior (1-2 Years)',
+            skills: skillsArray,
+            bio: bio ? bio.trim() : '',
             password: hashedPassword
         });
 
         const savedUser = await newUser.save();
 
+        // Convert to object and ensure password is never exposed in response
+        const userResponse = savedUser.toObject();
+        delete userResponse.password;
+
         res.status(201).json({
             success: true,
-            message: 'User saved to MongoDB with hashed sensitive data!',
-            data: savedUser
+            message: 'User registered successfully and stored in MongoDB!',
+            data: userResponse
         });
     } catch (error) {
-        console.error('Error creating user:', error);
+        console.error('Error registering user:', error);
         res.status(500).json({
             success: false,
-            message: 'Server error while saving user',
+            message: 'Server error while registering user',
             error: error.message
         });
     }
 });
 
-// 3. Delete a user (optional utility for live demo)
+// 3. Delete user by ID
 app.delete('/api/users/:id', async (req, res) => {
     try {
         const { id } = req.params;
-        const deletedUser = await User.findByIdAndDelete(id);
+        const deletedUser = await User.findByIdAndDelete(id).select('-password');
 
         if (!deletedUser) {
             return res.status(404).json({
                 success: false,
-                message: 'User not found'
+                message: 'User record not found'
             });
         }
 
         res.status(200).json({
             success: true,
-            message: 'Record deleted successfully',
+            message: 'Member profile removed successfully',
             data: deletedUser
         });
     } catch (error) {
         console.error('Error deleting user:', error);
         res.status(500).json({
             success: false,
-            message: 'Server error while deleting user',
+            message: 'Server error while deleting record',
             error: error.message
         });
     }
 });
 
-// Serve frontend page fallback (Express 5 compatible)
+// Serve frontend page fallback
 app.use((req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });

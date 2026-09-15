@@ -1,55 +1,74 @@
 // DOM Elements
-const userForm = document.getElementById('userForm');
-const userNameInput = document.getElementById('userName');
-const userEmailInput = document.getElementById('userEmail');
-const userPasswordInput = document.getElementById('userPassword');
+const memberForm = document.getElementById('memberForm');
+const fullNameInput = document.getElementById('fullName');
+const emailInput = document.getElementById('email');
+const phoneInput = document.getElementById('phone');
+const cityInput = document.getElementById('city');
+const countryInput = document.getElementById('country');
+const roleInput = document.getElementById('role');
+const organizationInput = document.getElementById('organization');
+const experienceInput = document.getElementById('experience');
+const skillsInput = document.getElementById('skills');
+const bioInput = document.getElementById('bio');
+const passwordInput = document.getElementById('password');
+
 const togglePasswordBtn = document.getElementById('togglePasswordBtn');
 const toggleIcon = document.getElementById('toggleIcon');
 const submitBtn = document.getElementById('submitBtn');
 const btnSpinner = document.getElementById('btnSpinner');
 
-const recordsList = document.getElementById('recordsList');
-const recordCounter = document.getElementById('recordCounter');
+const profilesGrid = document.getElementById('profilesGrid');
+const memberCountBadge = document.getElementById('memberCountBadge');
 const loadingState = document.getElementById('loadingState');
 const emptyState = document.getElementById('emptyState');
 const refreshBtn = document.getElementById('refreshBtn');
 const refreshIcon = document.getElementById('refreshIcon');
 const toastContainer = document.getElementById('toastContainer');
 
-// Initialize
+// On Page Load
 document.addEventListener('DOMContentLoaded', () => {
-    fetchAndRenderUsers();
+    fetchAndRenderMembers();
 });
 
 // Toggle Password Visibility
 togglePasswordBtn.addEventListener('click', () => {
-    const isPassword = userPasswordInput.type === 'password';
-    userPasswordInput.type = isPassword ? 'text' : 'password';
+    const isPassword = passwordInput.type === 'password';
+    passwordInput.type = isPassword ? 'text' : 'password';
     toggleIcon.className = isPassword ? 'fa-regular fa-eye-slash' : 'fa-regular fa-eye';
 });
 
-// Refresh Button Event
+// Refresh Directory
 refreshBtn.addEventListener('click', () => {
     refreshIcon.classList.add('fa-spin');
-    fetchAndRenderUsers().finally(() => {
+    fetchAndRenderMembers().finally(() => {
         setTimeout(() => refreshIcon.classList.remove('fa-spin'), 600);
     });
 });
 
 // Handle Form Submission
-userForm.addEventListener('submit', async (e) => {
+memberForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const name = userNameInput.value.trim();
-    const email = userEmailInput.value.trim();
-    const password = userPasswordInput.value;
+    const payload = {
+        fullName: fullNameInput.value.trim(),
+        email: emailInput.value.trim(),
+        phone: phoneInput.value.trim(),
+        city: cityInput.value.trim(),
+        country: countryInput.value.trim() || 'Pakistan',
+        role: roleInput.value.trim(),
+        organization: organizationInput.value.trim(),
+        experience: experienceInput.value,
+        skills: skillsInput.value.trim(),
+        bio: bioInput.value.trim(),
+        password: passwordInput.value
+    };
 
-    if (!name || !email || !password) {
-        showToast('Please fill in all fields', 'error');
+    // Client-side quick check
+    if (!payload.fullName || !payload.email || !payload.phone || !payload.city || !payload.role || !payload.organization || !payload.password) {
+        showToast('Please fill in all required fields marked with *', 'error');
         return;
     }
 
-    // Set Loading state on button
     setFormLoading(true);
 
     try {
@@ -58,32 +77,39 @@ userForm.addEventListener('submit', async (e) => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ name, email, password })
+            body: JSON.stringify(payload)
         });
 
         const result = await response.json();
 
         if (response.ok && result.success) {
-            showToast(result.message || 'User saved and hashed securely!', 'success');
-            userForm.reset();
-            userPasswordInput.type = 'password';
+            showToast('Member registered successfully and stored in MongoDB!', 'success');
+            memberForm.reset();
+            countryInput.value = 'Pakistan';
+            passwordInput.type = 'password';
             toggleIcon.className = 'fa-regular fa-eye';
-            
-            // Refresh list to immediately render new record on the same page
-            await fetchAndRenderUsers();
+
+            // Refresh directory immediately on same page
+            await fetchAndRenderMembers();
+
+            // Smooth scroll down to profiles directory
+            const profilesSection = document.getElementById('profilesSection');
+            if (profilesSection) {
+                profilesSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         } else {
-            showToast(result.message || 'Failed to save user', 'error');
+            showToast(result.message || 'Failed to register member', 'error');
         }
     } catch (error) {
-        console.error('Error saving user:', error);
-        showToast('Network or server error occurred', 'error');
+        console.error('Registration error:', error);
+        showToast('Network or server connection error', 'error');
     } finally {
         setFormLoading(false);
     }
 });
 
-// Fetch & Render Users from MongoDB
-async function fetchAndRenderUsers() {
+// Fetch all members from MongoDB
+async function fetchAndRenderMembers() {
     try {
         const response = await fetch('/api/users');
         const result = await response.json();
@@ -91,84 +117,121 @@ async function fetchAndRenderUsers() {
         loadingState.classList.add('hidden');
 
         if (response.ok && result.success) {
-            const users = result.data || [];
-            updateRecordCounter(users.length);
+            const members = result.data || [];
+            updateCountBadge(members.length);
 
-            if (users.length === 0) {
-                recordsList.innerHTML = '';
+            if (members.length === 0) {
+                profilesGrid.innerHTML = '';
                 emptyState.classList.remove('hidden');
             } else {
                 emptyState.classList.add('hidden');
-                renderUserList(users);
+                renderMemberList(members);
             }
         } else {
-            showToast('Failed to load records from MongoDB', 'error');
+            showToast('Failed to load member records', 'error');
         }
     } catch (error) {
         loadingState.classList.add('hidden');
-        console.error('Error fetching users:', error);
-        showToast('Could not connect to server', 'error');
+        console.error('Fetch error:', error);
+        showToast('Unable to load directory from server', 'error');
     }
 }
 
-// Render User Cards
-function renderUserList(users) {
-    recordsList.innerHTML = '';
+// Render Member Cards in the Grid
+function renderMemberList(members) {
+    profilesGrid.innerHTML = '';
 
-    users.forEach((user) => {
-        const item = document.createElement('div');
-        item.className = 'record-item';
+    members.forEach((member) => {
+        const card = document.createElement('div');
+        card.className = 'member-card';
 
-        const initial = (user.name || 'U').charAt(0).toUpperCase();
-        const formattedDate = user.createdAt 
-            ? new Date(user.createdAt).toLocaleString(undefined, {
+        const name = member.fullName || 'Anonymous Member';
+        const initials = getInitials(name);
+        
+        // Skills formatting
+        let skillsHtml = '';
+        if (member.skills && member.skills.length > 0) {
+            const skillChips = member.skills
+                .map(skill => `<span class="skill-chip">${escapeHtml(skill)}</span>`)
+                .join('');
+            skillsHtml = `
+                <div class="skills-wrap">
+                    <div class="skills-label">Skills & Tech Stack</div>
+                    <div class="skills-chips">${skillChips}</div>
+                </div>
+            `;
+        }
+
+        // Bio formatting
+        let bioHtml = '';
+        if (member.bio && member.bio.trim() !== '') {
+            bioHtml = `<div class="bio-box">"${escapeHtml(member.bio)}"</div>`;
+        }
+
+        const formattedDate = member.createdAt
+            ? new Date(member.createdAt).toLocaleDateString('en-US', {
+                year: 'numeric',
                 month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
+                day: 'numeric'
               })
-            : 'Just now';
+            : 'Recent';
 
-        item.innerHTML = `
-            <div class="record-top">
-                <div class="user-identity">
-                    <div class="user-avatar">${escapeHtml(initial)}</div>
-                    <div class="user-names">
-                        <h4>${escapeHtml(user.name)}</h4>
-                        <span class="email">${escapeHtml(user.email)}</span>
+        card.innerHTML = `
+            <div>
+                <div class="member-card-header">
+                    <div class="avatar">${escapeHtml(initials)}</div>
+                    <div class="member-title-box">
+                        <h3>${escapeHtml(name)}</h3>
+                        <div class="member-role">${escapeHtml(member.role || 'Member')}</div>
+                        <span class="verified-pill">
+                            <i class="fa-solid fa-circle-check"></i> Verified Member
+                        </span>
                     </div>
                 </div>
-                <div class="record-actions">
-                    <button class="btn-delete" title="Delete Record" onclick="deleteUser('${user._id}')">
-                        <i class="fa-regular fa-trash-can"></i>
-                    </button>
+
+                <div class="member-details">
+                    <div class="detail-row">
+                        <i class="fa-regular fa-building"></i>
+                        <span class="highlight-text">${escapeHtml(member.organization || 'Not Specified')}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span>${escapeHtml(member.city || '')}${member.country ? ', ' + escapeHtml(member.country) : ''}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span class="exp-tag">${escapeHtml(member.experience || 'Junior')}</span>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fa-regular fa-envelope"></i>
+                        <span>${escapeHtml(member.email)}</span>
+                    </div>
+                    ${member.phone ? `
+                    <div class="detail-row">
+                        <i class="fa-solid fa-phone"></i>
+                        <span>${escapeHtml(member.phone)}</span>
+                    </div>` : ''}
                 </div>
+
+                ${skillsHtml}
+                ${bioHtml}
             </div>
 
-            <div class="hash-container">
-                <div class="hash-label-row">
-                    <span class="hash-badge">
-                        <i class="fa-solid fa-lock"></i> Bcrypt Hash (Stored in DB)
-                    </span>
-                    <button class="copy-hash-btn" onclick="copyToClipboard('${escapeHtml(user.password)}', this)">
-                        <i class="fa-regular fa-copy"></i> Copy Hash
-                    </button>
-                </div>
-                <div class="hash-value">${escapeHtml(user.password)}</div>
-            </div>
-
-            <div class="record-footer">
-                <span><i class="fa-regular fa-clock"></i> ${formattedDate}</span>
+            <div class="card-footer">
+                <span><i class="fa-regular fa-calendar"></i> Joined ${formattedDate}</span>
+                <button class="btn-card-delete" onclick="deleteMember('${member._id}')" title="Delete profile">
+                    <i class="fa-regular fa-trash-can"></i> Delete
+                </button>
             </div>
         `;
 
-        recordsList.appendChild(item);
+        profilesGrid.appendChild(card);
     });
 }
 
-// Delete User Record
-window.deleteUser = async function(id) {
-    if (!confirm('Are you sure you want to delete this record from MongoDB?')) return;
+// Delete Member
+window.deleteMember = async function(id) {
+    if (!confirm('Are you sure you want to delete this member profile from MongoDB?')) return;
 
     try {
         const response = await fetch(`/api/users/${id}`, {
@@ -177,36 +240,30 @@ window.deleteUser = async function(id) {
         const result = await response.json();
 
         if (response.ok && result.success) {
-            showToast('Record deleted successfully', 'success');
-            await fetchAndRenderUsers();
+            showToast('Member profile removed from MongoDB', 'success');
+            await fetchAndRenderMembers();
         } else {
             showToast(result.message || 'Failed to delete record', 'error');
         }
     } catch (error) {
-        console.error('Error deleting record:', error);
-        showToast('Error deleting record', 'error');
+        console.error('Delete error:', error);
+        showToast('Error removing record', 'error');
     }
 };
 
-// Copy Hash to Clipboard
-window.copyToClipboard = function(text, buttonElement) {
-    navigator.clipboard.writeText(text).then(() => {
-        const originalHTML = buttonElement.innerHTML;
-        buttonElement.innerHTML = '<i class="fa-solid fa-check" style="color: #10b981;"></i> Copied!';
-        setTimeout(() => {
-            buttonElement.innerHTML = originalHTML;
-        }, 1800);
-    }).catch(err => {
-        console.error('Copy failed:', err);
-    });
-};
-
-// Update counter pill
-function updateRecordCounter(count) {
-    recordCounter.textContent = `${count} Record${count === 1 ? '' : 's'}`;
+// Helper to extract initials
+function getInitials(name) {
+    const parts = name.trim().split(' ').filter(p => p.length > 0);
+    if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-// Set form loading state
+// Update count badge
+function updateCountBadge(count) {
+    memberCountBadge.textContent = `${count} Registered Member${count === 1 ? '' : 's'}`;
+}
+
+// Form loading state toggle
 function setFormLoading(isLoading) {
     if (isLoading) {
         submitBtn.disabled = true;
@@ -219,13 +276,13 @@ function setFormLoading(isLoading) {
     }
 }
 
-// Show Toast notification
+// Toast notification display
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    const icon = type === 'success' 
-        ? '<i class="fa-solid fa-circle-check"></i>' 
+    const icon = type === 'success'
+        ? '<i class="fa-solid fa-circle-check"></i>'
         : '<i class="fa-solid fa-circle-exclamation"></i>';
 
     toast.innerHTML = `${icon} <span>${escapeHtml(message)}</span>`;
@@ -237,10 +294,10 @@ function showToast(message, type = 'success') {
         toast.style.transform = 'translateX(100%)';
         toast.style.transition = 'all 0.3s ease';
         setTimeout(() => toast.remove(), 300);
-    }, 3500);
+    }, 4000);
 }
 
-// Utility: Escape HTML to avoid XSS
+// Escape HTML for XSS prevention
 function escapeHtml(str) {
     if (!str) return '';
     return String(str)

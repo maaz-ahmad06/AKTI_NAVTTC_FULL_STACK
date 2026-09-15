@@ -3,162 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Secure Auth & Bcrypt Hashing - MongoDB Live Demo</title>
+    <title>Member Registration & Profiles Portal</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons CDN -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="background-blobs">
-        <div class="blob blob-1"></div>
-        <div class="blob blob-2"></div>
-        <div class="blob blob-3"></div>
-    </div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
+    <div class="bg-glow bg-glow-3"></div>
 
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="badge-header">
-                <i class="fa-solid fa-shield-halved"></i>
-                <span>Class 36 • Full Stack Security Demo</span>
+    <div class="page-wrapper">
+        <!-- Top Navigation Bar / Branding -->
+        <header class="navbar">
+            <div class="nav-brand">
+                <div class="brand-icon">
+                    <i class="fa-solid fa-users-viewfinder"></i>
+                </div>
+                <div>
+                    <span class="brand-title">DevDirectory</span>
+                    <span class="brand-badge">Full Stack • Class 36</span>
+                </div>
             </div>
-            <h1>Bcrypt Hashing & MongoDB Live Store</h1>
-            <p>Enter user data below. Sensitive data is automatically hashed with <strong>bcrypt (10 salt rounds)</strong> on the backend before saving to MongoDB Atlas, and rendered instantly on this same page.</p>
+            <div class="nav-stats">
+                <span class="stat-pill"><i class="fa-solid fa-shield-halved"></i> Bcrypt Secured</span>
+                <span class="stat-pill"><i class="fa-solid fa-database"></i> MongoDB Atlas</span>
+            </div>
         </header>
 
-        <!-- Main Content Grid -->
-        <div class="main-grid">
-            <!-- Left Column: Input Form -->
-            <section class="card form-card">
-                <div class="card-header">
-                    <div class="icon-circle icon-shield">
-                        <i class="fa-solid fa-lock"></i>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <h1>Comprehensive Member Registration</h1>
+            <p>Register your complete professional profile. Sensitive security credentials (passwords) are securely hashed with <strong>bcrypt (10 rounds)</strong> on the backend and stored safely in MongoDB.</p>
+        </section>
+
+        <!-- MAIN FORM SECTION (Top Full Width) -->
+        <main class="form-container">
+            <div class="form-card">
+                <div class="form-card-header">
+                    <div class="header-icon-box">
+                        <i class="fa-solid fa-id-card"></i>
                     </div>
                     <div>
-                        <h2>Submit User Data</h2>
-                        <p class="subtitle">Data is encrypted on the server</p>
+                        <h2>Member Profile Information</h2>
+                        <p>Fill in all the required details to register in our developer network</p>
                     </div>
                 </div>
 
-                <form id="userForm" autocomplete="off">
-                    <div class="form-group">
-                        <label for="userName">
-                            <i class="fa-regular fa-user"></i> Full Name
-                        </label>
-                        <input 
-                            type="text" 
-                            id="userName" 
-                            name="name" 
-                            placeholder="e.g. Maaz Ahmad" 
-                            required 
-                            autocomplete="off"
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="userEmail">
-                            <i class="fa-regular fa-envelope"></i> Email Address
-                        </label>
-                        <input 
-                            type="email" 
-                            id="userEmail" 
-                            name="email" 
-                            placeholder="e.g. maaz@example.com" 
-                            required 
-                            autocomplete="off"
-                        >
-                    </div>
-
-                    <div class="form-group">
-                        <label for="userPassword">
-                            <i class="fa-solid fa-key"></i> Sensitive Password / Secret
-                        </label>
-                        <div class="password-wrapper">
-                            <input 
-                                type="password" 
-                                id="userPassword" 
-                                name="password" 
-                                placeholder="Enter secret password..." 
-                                required 
-                                autocomplete="new-password"
-                            >
-                            <button type="button" id="togglePasswordBtn" class="toggle-pwd-btn" title="Toggle Visibility">
-                                <i class="fa-regular fa-eye" id="toggleIcon"></i>
-                            </button>
+                <form id="memberForm" autocomplete="off">
+                    <!-- SECTION 1: Personal Details -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-user-circle"></i>
+                            <span>1. Personal Information</span>
                         </div>
-                        <span class="input-hint">
-                            <i class="fa-solid fa-circle-info"></i> Will be transformed into a 60-character <code>$2a$...</code> hash on backend.
-                        </span>
-                    </div>
-
-                    <div class="security-infobox">
-                        <div class="info-title">
-                            <i class="fa-solid fa-microchip"></i> Backend Flow:
-                        </div>
-                        <div class="flow-steps">
-                            <span class="step-badge">1. Plain Input</span>
-                            <i class="fa-solid fa-arrow-right flow-arrow"></i>
-                            <span class="step-badge highlight">2. Bcrypt Hash (Salt: 10)</span>
-                            <i class="fa-solid fa-arrow-right flow-arrow"></i>
-                            <span class="step-badge">3. MongoDB Save</span>
+                        <div class="form-row three-col">
+                            <div class="input-group">
+                                <label for="fullName">Full Name <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-user input-icon"></i>
+                                    <input type="text" id="fullName" name="fullName" placeholder="e.g. Muhammad Maaz" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="email">Email Address <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-envelope input-icon"></i>
+                                    <input type="email" id="email" name="email" placeholder="e.g. maaz@example.com" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="phone">Phone Number <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-phone input-icon"></i>
+                                    <input type="tel" id="phone" name="phone" placeholder="e.g. +92 300 1234567" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <button type="submit" id="submitBtn" class="btn btn-primary">
-                        <span class="btn-text">
-                            <i class="fa-solid fa-paper-plane"></i> Save & Hash in MongoDB
-                        </span>
-                        <span class="spinner hidden" id="btnSpinner"></span>
-                    </button>
-                </form>
-            </section>
-
-            <!-- Right Column: Live Data Display -->
-            <section class="card display-card">
-                <div class="card-header space-between">
-                    <div class="flex-align">
-                        <div class="icon-circle icon-database">
-                            <i class="fa-solid fa-database"></i>
+                    <!-- SECTION 2: Location -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-location-dot"></i>
+                            <span>2. Location & Origin</span>
                         </div>
-                        <div>
-                            <h2>MongoDB Records</h2>
-                            <p class="subtitle">Live database entries rendered directly</p>
+                        <div class="form-row two-col">
+                            <div class="input-group">
+                                <label for="city">City / Region <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-city input-icon"></i>
+                                    <input type="text" id="city" name="city" placeholder="e.g. Peshawar / Lahore / Karachi" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="country">Country <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-globe input-icon"></i>
+                                    <input type="text" id="country" name="country" value="Pakistan" placeholder="e.g. Pakistan" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="header-actions">
-                        <span class="record-counter" id="recordCounter">0 Records</span>
-                        <button id="refreshBtn" class="btn-icon" title="Refresh Records">
-                            <i class="fa-solid fa-arrows-rotate" id="refreshIcon"></i>
+
+                    <!-- SECTION 3: Professional & Background Info -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-briefcase"></i>
+                            <span>3. Profession & Work Background</span>
+                        </div>
+                        <div class="form-row three-col">
+                            <div class="input-group">
+                                <label for="role">Profession / Job Title <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-laptop-code input-icon"></i>
+                                    <input type="text" id="role" name="role" placeholder="e.g. Full Stack MERN Developer" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="organization">Company / Institute <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-regular fa-building input-icon"></i>
+                                    <input type="text" id="organization" name="organization" placeholder="e.g. AKTI NAVTTC / Freelance" required>
+                                </div>
+                            </div>
+                            <div class="input-group">
+                                <label for="experience">Experience Level <span class="required">*</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-chart-line input-icon"></i>
+                                    <select id="experience" name="experience" required>
+                                        <option value="Student / Fresher">Student / Fresher</option>
+                                        <option value="Junior (1-2 Years)" selected>Junior (1-2 Years)</option>
+                                        <option value="Mid-Level (3-5 Years)">Mid-Level (3-5 Years)</option>
+                                        <option value="Senior (5+ Years)">Senior (5+ Years)</option>
+                                        <option value="Freelancer / Self-Employed">Freelancer / Self-Employed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row one-col">
+                            <div class="input-group">
+                                <label for="skills">Technical Skills & Expertise <span class="hint">(Comma separated)</span></label>
+                                <div class="input-wrapper">
+                                    <i class="fa-solid fa-tags input-icon"></i>
+                                    <input type="text" id="skills" name="skills" placeholder="e.g. HTML, CSS, JavaScript, React.js, Node.js, Express, MongoDB">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row one-col">
+                            <div class="input-group">
+                                <label for="bio">Professional Summary / Bio</label>
+                                <div class="input-wrapper">
+                                    <textarea id="bio" name="bio" rows="3" placeholder="Briefly describe what you do, your achievements or current projects..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Security & Sensitive Credentials -->
+                    <div class="form-section">
+                        <div class="section-title">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>4. Account Security & Verification</span>
+                        </div>
+                        <div class="form-row two-col">
+                            <div class="input-group">
+                                <label for="password">Account Password / Secret PIN <span class="required">*</span></label>
+                                <div class="input-wrapper password-box">
+                                    <i class="fa-solid fa-key input-icon"></i>
+                                    <input type="password" id="password" name="password" placeholder="Enter secure password..." required autocomplete="new-password">
+                                    <button type="button" id="togglePasswordBtn" class="toggle-pwd-btn" title="Toggle password visibility">
+                                        <i class="fa-regular fa-eye" id="toggleIcon"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="security-note-box">
+                                <div class="note-header">
+                                    <i class="fa-solid fa-user-shield"></i>
+                                    <strong>Privacy & Security Guarantee</strong>
+                                </div>
+                                <p>Password is strictly for account authentication. It is <strong>hashed on the server with Bcrypt</strong> and <strong>NEVER displayed</strong> anywhere in public profiles.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Actions -->
+                    <div class="form-submit-row">
+                        <button type="submit" id="submitBtn" class="btn btn-primary">
+                            <span class="btn-text"><i class="fa-solid fa-user-plus"></i> Complete Registration & Save Profile</span>
+                            <span class="spinner hidden" id="btnSpinner"></span>
                         </button>
                     </div>
-                </div>
+                </form>
+            </div>
+        </main>
 
-                <!-- Records List Container -->
-                <div class="records-container" id="recordsContainer">
-                    <!-- Loading Skeleton -->
-                    <div class="loading-state" id="loadingState">
-                        <div class="spinner-large"></div>
-                        <p>Fetching records from MongoDB Atlas...</p>
+        <!-- SEPARATE BOTTOM SECTION: REGISTERED PROFILES (BELOW THE FORM) -->
+        <section class="profiles-section" id="profilesSection">
+            <div class="section-header-row">
+                <div class="section-header-title">
+                    <div class="header-icon-box blue-gradient">
+                        <i class="fa-solid fa-address-book"></i>
                     </div>
-
-                    <!-- Dynamic list items will be injected here -->
-                    <div class="records-list" id="recordsList"></div>
-
-                    <!-- Empty State -->
-                    <div class="empty-state hidden" id="emptyState">
-                        <div class="empty-icon">
-                            <i class="fa-solid fa-folder-open"></i>
-                        </div>
-                        <h3>No Records Found</h3>
-                        <p>Fill out the form on the left to add your first user record to MongoDB.</p>
+                    <div>
+                        <h2>Registered Members Directory</h2>
+                        <p>Complete directory of all registered profiles saved in MongoDB</p>
                     </div>
                 </div>
-            </section>
-        </div>
+                <div class="directory-actions">
+                    <span class="count-badge" id="memberCountBadge">0 Members</span>
+                    <button id="refreshBtn" class="btn-icon" title="Refresh Directory">
+                        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profiles Grid / Display Container -->
+            <div class="profiles-container" id="profilesContainer">
+                <!-- Loading State -->
+                <div class="loading-state" id="loadingState">
+                    <div class="spinner-large"></div>
+                    <p>Loading members directory from MongoDB...</p>
+                </div>
+
+                <!-- Cards Grid -->
+                <div class="profiles-grid" id="profilesGrid"></div>
+
+                <!-- Empty State -->
+                <div class="empty-state hidden" id="emptyState">
+                    <div class="empty-icon-wrap">
+                        <i class="fa-solid fa-users-slash"></i>
+                    </div>
+                    <h3>No Profiles Registered Yet</h3>
+                    <p>Fill out the complete registration form above to add the first member profile to the database.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>© 2026 AKTI NAVTTC Full Stack Practice • Class 36 • Secure User Registration</p>
+        </footer>
     </div>
 
     <!-- Toast Notification Container -->
